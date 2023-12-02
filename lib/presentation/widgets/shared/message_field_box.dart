@@ -39,7 +39,6 @@ class MessageFieldBox extends StatelessWidget {
         },
         autofocus: true,
         onFieldSubmitted: (value) {
-          print('Summit: $value');
           // Usando el provider directamente
           chatProvider.sendMessage(value);
           textController.clear();

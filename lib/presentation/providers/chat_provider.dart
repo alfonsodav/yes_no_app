@@ -1,8 +1,11 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:yes_no_app/config/helpers/get_yes_no_answer.dart';
 import 'package:yes_no_app/domain/entities/message.dart';
+import 'package:path_provider/path_provider.dart';
 
 class ChatProvider extends ChangeNotifier {
+  late File fileMessageList;
   final ScrollController chatScrollController = ScrollController();
   final GetYesNoAnswer getYesNoAnswer = GetYesNoAnswer();
   List<Message> messagesList = [
@@ -39,5 +42,18 @@ class ChatProvider extends ChangeNotifier {
         chatScrollController.position.maxScrollExtent,
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeOut);
+  }
+
+  Future<File> getFileMessage() async {
+    final applicatioDir = await getApplicationCacheDirectory();
+    final path = applicatioDir.path;
+    fileMessageList = File('$path/message_list.json');
+    return fileMessageList;
+  }
+
+  Future<String> getChatMessages() async {
+    final file = await getFileMessage();
+    final String contents = await file.readAsString();
+    return contents;
   }
 }
